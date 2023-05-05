@@ -8,16 +8,14 @@ import com.tapptitude.tappchart.model.ValueLabel
 import com.tapptitude.tappchart.ui.BackgroundStyle
 
 @Composable
-fun AreaChart(
+fun LineChart(
     modifier: Modifier = Modifier,
     data: List<ChartPoint>,
     xAxisLabels: List<ValueLabel>,
     yAxisLabels: List<ValueLabel>,
     yAxisInterval: AxisInterval,
     xAxisInterval: AxisInterval,
-    areaChartStyle: AreaChartDefaults.AreaChartStyle = AreaChartDefaults.areaChartStyle(),
+    lineChartStyle: AreaChartDefaults.LineChartStyle = AreaChartDefaults.lineChartStyle(),
     background: List<BackgroundStyle> = listOf(),
-    showPoints: Boolean = false,
-    showLine: Boolean = false,
 ) {
 }
