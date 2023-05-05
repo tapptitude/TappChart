@@ -26,6 +26,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "tappchart"
-include(":shared:common", ":shared:area",":shared:circle")
+include(":shared:common", ":shared:area", ":shared:circle", ":shared:bar")
 include(":desktop")
 include(":android")
