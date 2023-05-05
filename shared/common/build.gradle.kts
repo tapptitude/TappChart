@@ -12,26 +12,26 @@ dependencies {
     /**
      * Transform @Composable functions and enable optimizations with a Kotlin compiler plugin.
      */
-    implementation(compose.compiler.auto)
+    api(compose.compiler.auto)
 
     /**
      * Write Jetpack Compose applications with ready to use building blocks
      * and extend foundation to build your own design system pieces.
      */
-    implementation(compose.foundation)
+    api(compose.foundation)
 
     /**
      * Fundamental building blocks of Compose's programming model and state management,
      * and core runtime for the Compose Compiler Plugin to target.
      */
-    implementation(compose.runtime)
+    api(compose.runtime)
 
     /**
      * Fundamental components of compose UI needed to interact with the device,
      * including layout, drawing, and input.
      */
-    implementation(compose.ui)
+    api(compose.ui)
 
     // Tooling and support for IDE
-    implementation(compose.preview)
+    api(compose.preview)
 }
