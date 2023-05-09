@@ -8,6 +8,8 @@
  */
 
 pluginManagement {
+    includeBuild("build-logic")
+
     repositories {
         gradlePluginPortal()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
@@ -16,7 +18,14 @@ pluginManagement {
     }
 }
 
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
 rootProject.name = "tappchart"
-include(":tappchart")
+include(":shared:common", ":shared:area", ":shared:circle", ":shared:bar")
 include(":desktop")
 include(":android")

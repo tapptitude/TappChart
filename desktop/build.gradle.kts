@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":tappchart"))
+    implementation(project(":shared:common"))
     implementation(compose.desktop.currentOs)
 }
 
@@ -22,4 +22,9 @@ compose.desktop {
     application {
         mainClass = "MainKt"
     }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
