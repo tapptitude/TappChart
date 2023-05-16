@@ -34,7 +34,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.1"
+        kotlinCompilerExtensionVersion = "1.4.0"
     }
 
     compileOptions {
@@ -57,4 +57,5 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.4.0")
 
     implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation(project(mapOf("path" to ":shared:circle")))
 }
