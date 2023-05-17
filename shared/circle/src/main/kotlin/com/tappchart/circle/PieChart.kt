@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
@@ -26,20 +25,21 @@ fun PieChart(
     marginBetweenSlices: Dp = 0.dp,
     labelStyle: TextStyle,
 ) {
-    CircleChart(modifier, slices, angleOffset, marginBetweenSlices)
+    CircleChart(modifier, slices, angleOffset, marginBetweenSlices, labelStyle)
 }
 
 @Composable
-fun CircleChart(
+private fun CircleChart(
     modifier: Modifier,
     slices: List<Slice>,
     startAngle: Float,
-    marginBetweenSlices: Dp
+    marginBetweenSlices: Dp,
+    labelStyle: TextStyle
 ) {
     val arcStroke: Stroke = with(LocalDensity.current) {
         Stroke(
             width = marginBetweenSlices.toPx(),
-            cap = StrokeCap.Round,
+            miter = 1F
         )
     }
     var angle = startAngle - 90F
@@ -53,13 +53,16 @@ fun CircleChart(
                 sweepAngle = sweepAngle,
                 style = Fill
             )
-            drawArc(
-                color = Color.White,
-                useCenter = true,
-                startAngle = angle,
-                sweepAngle = sweepAngle,
-                style = arcStroke
-            )
+
+            if (marginBetweenSlices != 0.dp) {
+                drawArc(
+                    color = Color.White,
+                    useCenter = true,
+                    startAngle = angle,
+                    sweepAngle = sweepAngle,
+                    style = arcStroke
+                )
+            }
             angle += sweepAngle
         }
     }
