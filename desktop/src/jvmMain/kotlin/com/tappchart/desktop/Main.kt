@@ -1,4 +1,4 @@
-package org.tappchart.desktop
+package com.tappchart.desktop
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier

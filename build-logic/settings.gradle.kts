@@ -4,7 +4,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 
-include ":convention"
+include(":convention")

@@ -1,30 +1,28 @@
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+
 plugins {
-    id("org.jetbrains.kotlin.jvm")
-    id("org.jetbrains.compose")
-    id("java")
+    id("com.tapptitude.sharedcommon")
 }
 
-group = "org.tappchart.desktop"
-version = "unspecified"
-
-repositories {
-    mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    google()
-}
-
-dependencies {
-    implementation(project(":shared:common"))
-    implementation(compose.desktop.currentOs)
+kotlin {
+    sourceSets {
+        val jvmMain by getting {
+            dependencies {
+                implementation(projects.shared.common)
+                implementation(compose.desktop.currentOs)
+            }
+        }
+    }
 }
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
-    }
-}
+        mainClass = "com.tappchart.desktop.MainKt"
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "TappChartComposeDesktopApplication"
+            packageVersion = "1.0.0"
+        }
+    }
 }
