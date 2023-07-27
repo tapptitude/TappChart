@@ -8,7 +8,7 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.tapptitude.tappchart.HelloWorld
 
-fun main() = application{
+fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
         title = "TappChart",
