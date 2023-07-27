@@ -1,4 +1,4 @@
-package org.tappchart.desktop
+package com.tappchart.desktop
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
@@ -8,7 +8,7 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import com.tapptitude.tappchart.HelloWorld
 
-fun main() = application{
+fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
         title = "TappChart",
