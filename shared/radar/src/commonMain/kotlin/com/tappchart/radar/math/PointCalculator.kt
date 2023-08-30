@@ -36,10 +36,7 @@ internal object PointCalculator {
     fun xCoordinateOnCircle(
         angle: Double,
         radius: Float,
-    ): Float {
-        val angleInDegrees = Math.toRadians(angle)
-        return (cos(angleInDegrees) * radius).toFloat()
-    }
+    ): Float = (cos(angle.inRadians) * radius).toFloat()
 
     /**
      * Returns the X coordinate, starting from 3 o'clock counter-clockwise, of the Point determined
@@ -51,8 +48,5 @@ internal object PointCalculator {
     fun yCoordinateOnCircle(
         angle: Double,
         radius: Float,
-    ): Float {
-        val angleInDegrees = Math.toRadians(angle)
-        return (sin(angleInDegrees) * radius).toFloat()
-    }
+    ): Float = (sin(angle.inRadians) * radius).toFloat()
 }

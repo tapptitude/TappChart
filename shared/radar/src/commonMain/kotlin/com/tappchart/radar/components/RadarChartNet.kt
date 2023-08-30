@@ -4,9 +4,10 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import com.tappchart.radar.math.PointCalculator
 
-internal fun ContentDrawScope.radarChartNet(
+internal fun DrawScope.radarChartNet(
     netLayersCount: Int,
     anglesCount: Int,
     startAngleOffset: Float = 0f,
@@ -23,7 +24,7 @@ internal fun ContentDrawScope.radarChartNet(
     }
 }
 
-private fun ContentDrawScope.drawNetLayer(
+private fun DrawScope.drawNetLayer(
     radius: Float,
     anglesCount: Int,
     startAngleOffset: Float,
@@ -38,14 +39,9 @@ private fun ContentDrawScope.drawNetLayer(
             x = size.width / 2 + PointCalculator.xCoordinateOnCircle(angle = angle, radius = radius),
             y = size.height / 2 + PointCalculator.yCoordinateOnCircle(angle = angle, radius = radius)
         )
-        if (i == 1) {// it's first
+        if (i == 1) {
             startOffset = offset
         }
-        drawCircle(
-            color = Color.Red,
-            radius = 4f,
-            center = offset
-        )
 
         if (previousOffset.isSpecified) {
             drawLine(

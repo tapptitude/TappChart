@@ -52,6 +52,7 @@ dependencies {
     configurations.implementation {
         exclude(group = "org.jetbrains.kotlin", module="kotlin-stdlib-jdk8" )
     }
+    implementation(project(":shared:radar"))
 
     implementation("androidx.activity:activity-compose:1.7.0")
     implementation("androidx.compose.foundation:foundation:1.4.0")
