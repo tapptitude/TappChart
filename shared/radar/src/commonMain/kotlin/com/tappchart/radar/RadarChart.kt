@@ -1,6 +1,5 @@
 package com.tappchart.radar
 
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.rememberTransformableState
@@ -17,14 +16,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.tappchart.radar.components.drawLabels
+import com.tappchart.radar.components.drawPolygon
 import com.tappchart.radar.components.radarChartNet
 import com.tappchart.radar.math.highestBetween
+import com.tappchart.radar.model.NetStyle
+import com.tappchart.radar.model.PolygonProperties
+import com.tappchart.radar.model.RadarEntry
 import com.tapptitude.tappchart.util.quickForEach
 import kotlin.math.max
 import kotlin.math.min
@@ -33,14 +39,15 @@ import kotlin.math.min
 @Composable
 fun RadarChart(
     modifier: Modifier,
-    layersCount: Int,
     pointsCount: Int,
+    entries: List<RadarEntry>,
     labels: List<String>,
+    labelStyle: TextStyle = TextStyle.Default,
+    netStyle: NetStyle,
     angleStartOffset: Float = 0f,
-    interiorRadius: Float = 10f,
 ) {
     check(pointsCount == labels.size) {
-        "You must provide an equal number of points and labels!"
+        "You must provide an equal number of points, labels!"
     }
 
     val textMeasurer = rememberTextMeasurer()
@@ -56,18 +63,26 @@ fun RadarChart(
             onDrawWithContent {
                 // Inset the drawing space with the space necessary for text
                 radarChartNet(
-                    netLayersCount = layersCount,
-                    anglesCount = pointsCount,
-                    innerSpaceRadius = interiorRadius,
+                    pointsCount = pointsCount,
                     circleRadius = circleRadius,
                     startAngleOffset = angleStartOffset,
+                    netStyle = netStyle
                 )
                 drawLabels(
                     startAngleOffset = angleStartOffset.toDouble(),
                     textMeasurer = textMeasurer,
                     labels = labels,
+                    labelStyle = labelStyle,
                     radius = circleRadius,
                 )
+
+                entries.forEach { entry ->
+                    drawPolygon(
+                        pointsCount = pointsCount,
+                        startAngleOffset = angleStartOffset,
+                        entry = entry
+                    )
+                }
             }
         }
     ))
@@ -120,10 +135,63 @@ fun Preview_RadarChart() {
         RadarChart(
             modifier = Modifier.fillMaxSize(),
             pointsCount = 6,
-            angleStartOffset = rotation,
-            layersCount = 5,
-            interiorRadius = 40f,
-            labels = listOf("label 1", "label 2", "label 3", "label 4", "label 5", "label 6")
+            angleStartOffset = 0f,
+            entries = listOf(
+                RadarEntry(
+                    values = listOf(25f, 110f, 190f, 75f, 200f, 140f),
+                    PolygonProperties(
+                        borderColor = Color.Magenta,
+                        borderWidth = 3f,
+                        areaColor = Color.Magenta.copy(alpha = 0.3f),
+                        dotsRadius = 10f
+                    )
+                ),
+                RadarEntry(
+                    values = listOf(250f, 310f, 90f, 150f, 20f, 400f),
+                    PolygonProperties(
+                        borderColor = Color.Cyan,
+                        borderWidth = 3f,
+                        areaColor = Color.Cyan.copy(alpha = 0.3f),
+                        dotsRadius = 10f
+                    )
+                ),
+                RadarEntry(
+                    values = listOf(305f, 200f, 360f, 400f, 160f, 390f),
+                    PolygonProperties(
+                        borderColor = Color.Green,
+                        borderWidth = 3f,
+                        areaColor = Color.Green.copy(alpha = 0.3f),
+                        dotsRadius = 10f
+                    )
+                ),
+                RadarEntry(
+                    values = listOf(100f, 350f, 30f, 175f, 267f, 440f),
+                    PolygonProperties(
+                        borderColor = Color.Red,
+                        borderWidth = 3f,
+                        areaColor = Color.Red.copy(alpha = 0.3f),
+                        dotsRadius = 10f
+                    )
+                ),
+                RadarEntry(
+                    values = listOf(215f, 310f, 200f, 15f, 0f, 180f),
+                    PolygonProperties(
+                        borderColor = Color.Yellow,
+                        borderWidth = 3f,
+                        areaColor = Color.Yellow.copy(alpha = 0.3f),
+                        dotsRadius = 10f
+                    )
+                ),
+            ),
+            labels = listOf("label 1", "label 2", "label 3", "label 4", "label 5", "label 6"),
+            labelStyle = TextStyle.Default.copy(fontStyle = FontStyle.Italic),
+            netStyle = NetStyle(
+                width = 4f,
+                color = Color.Black,
+                type = Stroke(),
+                interiorRadius = 50f,
+                layersCount = 5,
+            ),
         )
     }
 }

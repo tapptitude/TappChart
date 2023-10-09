@@ -1,6 +1,7 @@
 package com.tappchart.radar.math
 
 import androidx.compose.ui.geometry.Offset
+import com.tappchart.radar.Constants.CIRCLE_DEGREE
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -14,7 +15,7 @@ internal object PointCalculator {
         circleRadius: Float,
         radiusOffset: Float = 0f,
     ): List<Offset> = buildList {
-        val degreesPerAngle = 360 / pointsCount
+        val degreesPerAngle = CIRCLE_DEGREE / pointsCount
         var i = 1
         while (i <= pointsCount) {
             val angle = 1.0 * degreesPerAngle * i + radiusOffset
