@@ -1,5 +1,4 @@
 package com.tapptitude.tappchart.model
 
-@JvmInline
-value class ValueLabel(val label: String)
+data class ValueLabel(val label: String, val yValue:Float)
 
