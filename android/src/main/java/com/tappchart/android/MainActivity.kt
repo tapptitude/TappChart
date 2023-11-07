@@ -28,11 +28,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             BarChart(
                 modifier = Modifier.fillMaxWidth().height(300.dp).padding(24.dp),
-                yAxisInterval = AxisInterval(10f,0f),
+                yAxisInterval = AxisInterval(8f,0f),
                 data = listOf(
                     Bar(DataLabel("Guest"),1.3f),
                     Bar(DataLabel("New User"),3f),
-                    Bar(DataLabel("Existing User"),10f)
+                    Bar(DataLabel("Existing User"),8f)
                 ),
                 verticalLabel = listOf(
                     ValueLabel("0",0f),
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
                 labelStyle = TextStyle.Default,
                 spacingBetweenBars = 16.dp,
                 axisStyle = AxisStyle(1.dp, Brush.verticalGradient(listOf(Color.Gray, Color.Gray))),
-                barColor = listOf(Color.Blue, Color.Red, Color.Yellow)
+                barColor = listOf(Color.Blue, Color.Blue, Color.Blue)
             )
         }
     }

@@ -16,6 +16,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.tappchart.bar.model.Bar
 import com.tapptitude.tappchart.model.AxisInterval
 import com.tapptitude.tappchart.model.ValueLabel
@@ -34,26 +35,28 @@ fun BarChart(
     axisStyle: AxisStyle,
     background: List<BackgroundStyle> = listOf(),
     barColor: List<Color>,
+    yAxisPadding:Dp = 24.dp
 ) {
 
     val textMeasurer = rememberTextMeasurer()
-    Canvas(modifier = modifier.background(Color.Gray)) {
+    Canvas(modifier = modifier) {
         drawYAxis(verticalLabel, yAxisInterval, textMeasurer)
 
-        var topLeftX = 50f
-        val barWidth = (size.width - (spacingBetweenBars.toPx() * (data.size)) - 50f) / data.size
+        val startBarsPadding = yAxisPadding.toPx()
+        var barTopLeft = startBarsPadding
+        val barWidth = (size.width - (spacingBetweenBars.toPx() * (data.size)) - startBarsPadding) / data.size
         data.forEachIndexed { index, bar ->
             val color = barColor[index]
 
             drawRect(
                 color = color,
                 topLeft = Offset(
-                    topLeftX,
-                    size.height - (bar.value * size.height) / yAxisInterval.max
+                    x = barTopLeft,
+                    y = size.height - (bar.value * size.height) / yAxisInterval.max
                 ),
-                size = Size(barWidth, (bar.value * size.height) / 10)
+                size = Size(barWidth, (bar.value * size.height) / yAxisInterval.max)
             )
-            topLeftX += barWidth + spacingBetweenBars.toPx()
+            barTopLeft += barWidth + spacingBetweenBars.toPx()
         }
     }
 }
