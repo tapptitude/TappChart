@@ -23,25 +23,26 @@ import com.tapptitude.tappchart.model.ValueLabel
 import com.tapptitude.tappchart.ui.AxisStyle
 import com.tapptitude.tappchart.ui.BackgroundStyle
 import com.tapptitude.tappchart.ui.drawBackgroundGradient
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun BarChart(
     modifier: Modifier = Modifier,
     yAxisInterval: AxisInterval,
-    data: List<Bar>,
-    verticalLabels: List<ValueLabel>,
+    data: ImmutableList<Bar>,
+    verticalLabels: ImmutableList<ValueLabel>,
     labelStyle: TextStyle,
     spacingBetweenBars: Dp,
     axisStyle: AxisStyle,
-    barColor: List<Color>,
-    background: List<BackgroundStyle> = listOf(BackgroundStyle.HorizontalGrid),
+    barColor: ImmutableList<Color>,
+    background: ImmutableList<BackgroundStyle> = persistentListOf(BackgroundStyle.HorizontalGrid),
     yAxisPaddingToLine: Dp = 8.dp,
     xAxisPaddingToBars: Dp = 2.dp,
     firstBarStartPadding: Dp = 0.dp,
     lastBarEndPadding: Dp = 0.dp,
     showTopLabelMisaligned: Boolean = false
 ) {
-
     val textMeasurer = rememberTextMeasurer()
     Canvas(modifier = modifier) {
         val horizontalLabelHeight = textMeasurer.measure(data[0].key.label).size.height
