@@ -48,8 +48,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":shared:common"))
-    implementation(project(":shared:bar"))
+    implementation(projects.shared.common)
+    implementation(projects.shared.bar)
 
     configurations.implementation {
         exclude(group = "org.jetbrains.kotlin", module="kotlin-stdlib-jdk8" )
