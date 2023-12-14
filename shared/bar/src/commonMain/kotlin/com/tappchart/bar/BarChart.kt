@@ -102,7 +102,7 @@ private fun DrawScope.drawBarsWithHorizontalLabels(
 
     var barStartPosition = yAxisPaddingToFirstBar + firstBarStartPadding
     bars.forEachIndexed { index, bar ->
-        val color = barColor.getOrNull(index) ?: barColor.first()
+        val color = barColor.getOrNull(index) ?: barColor.firstOrNull() ?: Color.Blue
         val barHeightScaledToCanvas = bar.value * bottomOfChart / yAxisInterval.max
         drawBar(
             color = color,
