@@ -21,6 +21,7 @@ import com.tapptitude.tappchart.model.DataLabel
 import com.tapptitude.tappchart.model.ValueLabel
 import com.tapptitude.tappchart.ui.AxisStyle
 import com.tapptitude.tappchart.ui.BackgroundStyle
+import kotlinx.collections.immutable.persistentListOf
 
 class MainActivity : ComponentActivity() {
 
@@ -44,14 +45,14 @@ private fun TestBarChart1(modifier: Modifier = Modifier) {
             .height(300.dp)
             .padding(24.dp),
         yAxisInterval = AxisInterval(8f, 0f),
-        data = listOf(
+        data = persistentListOf(
             Bar(DataLabel("Guest"), 1.7f),
             Bar(DataLabel("New User"), 3f),
             Bar(DataLabel("Existing User"), 8f),
             Bar(DataLabel("Test User"), 5.5f),
             Bar(DataLabel("Test User 2"), 6.2f)
         ),
-        verticalLabels = listOf(
+        verticalLabels = persistentListOf(
             ValueLabel("0", 0f),
             ValueLabel("2K", 2f),
             ValueLabel("4K", 4f),
@@ -64,7 +65,7 @@ private fun TestBarChart1(modifier: Modifier = Modifier) {
             1.dp,
             Brush.linearGradient(listOf(Color(0xFFECEBEB), Color(0xFFECEBEB)))
         ),
-        barColor = listOf(Color.Blue, Color.Blue, Color.Red),
+        barColor = persistentListOf(Color.Blue, Color.Blue, Color.Red),
         showTopLabelMisaligned = false
     )
 }
@@ -77,7 +78,7 @@ private fun TestBarChart2(modifier: Modifier = Modifier) {
             .height(300.dp)
             .padding(24.dp),
         yAxisInterval = AxisInterval(28f, 0f),
-        data = listOf(
+        data = persistentListOf(
             Bar(DataLabel("Apr 2020"), 22f),
             Bar(DataLabel("May 2020"), 21.5f),
             Bar(DataLabel("Jun 2020"), 23.5f),
@@ -85,7 +86,7 @@ private fun TestBarChart2(modifier: Modifier = Modifier) {
             Bar(DataLabel("Aug 2020"), 22f),
             Bar(DataLabel("Sep 2020"), 21.5f)
         ),
-        verticalLabels = listOf(
+        verticalLabels = persistentListOf(
             ValueLabel("0", 0f),
             ValueLabel("8K", 8f),
             ValueLabel("16K", 16f),
@@ -97,8 +98,8 @@ private fun TestBarChart2(modifier: Modifier = Modifier) {
             1.dp,
             Brush.linearGradient(listOf(Color(0xFFECEBEB), Color(0xFF616161)))
         ),
-        barColor = listOf(Color.Blue),
-        background = listOf(
+        barColor = persistentListOf(Color.Blue),
+        background = persistentListOf(
             BackgroundStyle.Painter(
                 Brush.horizontalGradient(
                     listOf(Color.Cyan, Color.Magenta)

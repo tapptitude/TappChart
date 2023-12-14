@@ -4,6 +4,7 @@ package com.tappchart.bar
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -44,8 +45,11 @@ fun BarChart(
     showTopLabelMisaligned: Boolean = false
 ) {
     val textMeasurer = rememberTextMeasurer()
+    val firstElements = remember(data) { data.firstOrNull() } ?: throw IllegalArgumentException(
+        "List of bars (data) cannot be empty."
+    )
     Canvas(modifier = modifier) {
-        val horizontalLabelHeight = textMeasurer.measure(data[0].key.label).size.height
+        val horizontalLabelHeight = textMeasurer.measure(firstElements.key.label).size.height
         val bottomOfChart = size.height - horizontalLabelHeight - xAxisPaddingToBars.toPx()
         val maxWidthOfVerticalLabels =
             verticalLabels.maxOf { textMeasurer.measure(it.label).size.width }.toFloat()
