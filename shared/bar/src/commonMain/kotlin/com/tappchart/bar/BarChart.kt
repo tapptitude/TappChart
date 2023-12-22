@@ -3,6 +3,7 @@
 package com.tappchart.bar
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -48,7 +49,7 @@ fun BarChart(
     val firstElements = remember(data) { data.firstOrNull() } ?: throw IllegalArgumentException(
         "List of bars (data) cannot be empty."
     )
-    Canvas(modifier = modifier) {
+    Canvas(modifier = modifier.defaultMinSize(1.dp, 1.dp)) {
         val horizontalLabelHeight = textMeasurer.measure(firstElements.key.label).size.height
         val bottomOfChart = size.height - horizontalLabelHeight - xAxisPaddingToBars.toPx()
         val maxWidthOfVerticalLabels =
@@ -104,21 +105,26 @@ private fun DrawScope.drawBarsWithHorizontalLabels(
     bars.forEachIndexed { index, bar ->
         val color = barColor.getOrNull(index) ?: barColor.firstOrNull() ?: Color.Blue
         val barHeightScaledToCanvas = bar.value * bottomOfChart / yAxisInterval.max
-        drawBar(
-            color = color,
-            barStartPosition = barStartPosition,
-            barHeightScaledToCanvas = barHeightScaledToCanvas,
-            barVerticalPosition = bottomOfChart - barHeightScaledToCanvas,
-            barWidth = barWidth
-        )
-        barStartPosition += barWidth + paddingBetweenBars
-        drawHorizontalLabel(
-            horizontalLabelSize = textMeasurer.measure(bar.key.label, labelStyle),
-            barTopLeftPosition = barStartPosition,
-            spacingBetweenBars = paddingBetweenBars,
-            barWidth = barWidth,
-            xAxisPaddingToBars = xAxisPaddingToBars
-        )
+        val barVerticalPosition = bottomOfChart - barHeightScaledToCanvas
+        if (barVerticalPosition < size.height && barStartPosition < size.width
+            && barHeightScaledToCanvas >= 0f && barWidth >= 0f
+        ) {
+            drawBar(
+                color = color,
+                barStartPosition = barStartPosition,
+                barHeightScaledToCanvas = barHeightScaledToCanvas,
+                barVerticalPosition = barVerticalPosition,
+                barWidth = barWidth
+            )
+            barStartPosition += barWidth + paddingBetweenBars
+            drawHorizontalLabel(
+                horizontalLabelSize = textMeasurer.measure(bar.key.label, labelStyle),
+                barTopLeftPosition = barStartPosition,
+                spacingBetweenBars = paddingBetweenBars,
+                barWidth = barWidth,
+                xAxisPaddingToBars = xAxisPaddingToBars
+            )
+        }
     }
 }
 

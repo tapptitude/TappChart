@@ -9,6 +9,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(projects.shared.common)
+                implementation(projects.shared.bar)
                 implementation(compose.desktop.currentOs)
             }
         }

@@ -15,12 +15,15 @@ sealed interface BackgroundStyle {
     data class Painter(val brush: Brush) : BackgroundStyle
 }
 
-fun DrawScope.drawBackgroundGradient(brush: Brush, startOffset: Offset, endOffset: Offset) =
+fun DrawScope.drawBackgroundGradient(brush: Brush, startOffset: Offset, endOffset: Offset) {
+    val width = endOffset.x - startOffset.x
+    val height = endOffset.y - startOffset.y
     this.drawRect(
         brush = brush,
         topLeft = startOffset,
         size = Size(
-            width = endOffset.x - startOffset.x,
-            height = endOffset.y - startOffset.y
+            width = if (width < 0) 0f else width,
+            height = if (height < 0) 0f else height
         )
     )
+}
