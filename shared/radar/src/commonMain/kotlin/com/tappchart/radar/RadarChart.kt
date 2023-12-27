@@ -1,17 +1,19 @@
 package com.tappchart.radar
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.rememberTransformableState
-import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -76,11 +78,12 @@ fun RadarChart(
                     radius = circleRadius,
                 )
 
-                entries.forEach { entry ->
+                entries.quickForEach { entry ->
                     drawPolygon(
                         pointsCount = pointsCount,
                         startAngleOffset = angleStartOffset,
-                        entry = entry
+                        entry = entry,
+                        circleRadius = circleRadius,
                     )
                 }
             }
@@ -110,35 +113,33 @@ private fun calculateMaxTextSizes(labels: List<String>, textMeasurer: TextMeasur
 @Preview
 @Composable
 fun Preview_RadarChart() {
-//    val infiniteTransition = rememberInfiniteTransition()
-//    val rotation by infiniteTransition.animateFloat(
-//        initialValue = 0f,
-//        targetValue = 360f,
-//        animationSpec = infiniteRepeatable(
-//            animation = tween(durationMillis = 10_000, easing = LinearEasing),
-//            repeatMode = RepeatMode.Restart,
-//        )
-//    )
+    val infiniteTransition = rememberInfiniteTransition()
+    val rotation by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 10_000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart,
+        )
+    )
 
-    var rotation by remember { mutableStateOf(0f) }
-    val state = rememberTransformableState { _, _, rotationChange ->
-        rotation += rotationChange
-    }
+//    var rotation by remember { mutableStateOf(0f) }
+//    val state = rememberTransformableState { _, _, rotationChange ->
+//        rotation += rotationChange
+//    }
 
 
     Box(
-        modifier = Modifier.fillMaxSize().transformable(state).border(
-            1.dp, Color.Black,
-        ).padding(10.dp),
+        modifier = Modifier.fillMaxSize().border(1.dp, Color.Black).padding(10.dp),
         contentAlignment = Alignment.Center,
     ) {
         RadarChart(
             modifier = Modifier.fillMaxSize(),
             pointsCount = 6,
-            angleStartOffset = 0f,
+            angleStartOffset = rotation,
             entries = listOf(
                 RadarEntry(
-                    values = listOf(25f, 110f, 190f, 75f, 200f, 140f),
+                    values = listOf(.25f, .110f, .190f, .75f, .200f, .140f),
                     PolygonProperties(
                         borderColor = Color.Magenta,
                         borderWidth = 3f,
@@ -147,7 +148,7 @@ fun Preview_RadarChart() {
                     )
                 ),
                 RadarEntry(
-                    values = listOf(250f, 310f, 90f, 150f, 20f, 400f),
+                    values = listOf(.250f, .310f, .90f, .150f, .20f, .400f),
                     PolygonProperties(
                         borderColor = Color.Cyan,
                         borderWidth = 3f,
@@ -156,7 +157,7 @@ fun Preview_RadarChart() {
                     )
                 ),
                 RadarEntry(
-                    values = listOf(305f, 200f, 360f, 400f, 160f, 390f),
+                    values = listOf(.305f, .200f, .360f, .400f, .160f, .390f),
                     PolygonProperties(
                         borderColor = Color.Green,
                         borderWidth = 3f,
@@ -165,7 +166,7 @@ fun Preview_RadarChart() {
                     )
                 ),
                 RadarEntry(
-                    values = listOf(100f, 350f, 30f, 175f, 267f, 440f),
+                    values = listOf(.100f, .350f, .30f, .175f, .267f, .440f),
                     PolygonProperties(
                         borderColor = Color.Red,
                         borderWidth = 3f,
@@ -174,7 +175,7 @@ fun Preview_RadarChart() {
                     )
                 ),
                 RadarEntry(
-                    values = listOf(215f, 310f, 200f, 15f, 0f, 180f),
+                    values = listOf(.215f, .310f, .200f, .15f, .0f, .180f),
                     PolygonProperties(
                         borderColor = Color.Yellow,
                         borderWidth = 3f,

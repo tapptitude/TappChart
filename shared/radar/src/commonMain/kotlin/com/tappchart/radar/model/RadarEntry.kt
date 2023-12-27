@@ -5,6 +5,9 @@ package com.tappchart.radar.model
  * The values must match the number of corners the [RadarChart].
  * If the number of entries in the [values] is smaller than the number of corners,
  * the rest will be considered to be 0
+ *
+ * @param values list of values, between [0,1], with the values that need to be represented.
+ * @param polygon
  */
 data class RadarEntry(
     val values: List<Float>,

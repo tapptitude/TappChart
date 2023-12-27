@@ -14,26 +14,26 @@ import com.tappchart.radar.model.RadarEntry
 fun DrawScope.drawPolygon(
     pointsCount: Int,
     startAngleOffset: Float,
-    entry: RadarEntry
+    entry: RadarEntry,
+    circleRadius: Float
 ) {
     val degreesPerAngle: Double = Constants.CIRCLE_DEGREE / pointsCount
     val graphPath = Path()
     val points: MutableList<Offset> = mutableListOf()
-    var radius: Float
+
     for (i in Constants.FIRST_ELEMENT_POSITION..pointsCount) {
         val angle = startAngleOffset + degreesPerAngle * i
-        radius = entry.valueAt(i - 1)
+        val entryValue = entry.valueAt(i - 1)
 
-        val offset = Offset(
-            x = size.width / 2 + PointCalculator.xCoordinateOnCircle(angle = angle, radius = radius),
-            y = size.height / 2 + PointCalculator.yCoordinateOnCircle(angle = angle, radius = radius)
-        )
+        val x = size.width / 2 + PointCalculator.xCoordinateOnCircle(angle = angle, radius = circleRadius) * entryValue
+        val y = size.height / 2 + PointCalculator.yCoordinateOnCircle(angle = angle, radius = circleRadius) * entryValue
+
         if (i == Constants.FIRST_ELEMENT_POSITION) {
-            graphPath.moveTo(offset.x, offset.y)
+            graphPath.moveTo(x, y)
         } else {
-            graphPath.lineTo(offset.x, offset.y)
+            graphPath.lineTo(x, y)
         }
-        points.add(offset)
+        points.add(Offset(x,y))
     }
     graphPath.close()
 
