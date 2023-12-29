@@ -7,6 +7,7 @@ import com.tappchart.radar.Constants.CIRCLE_DEGREE
 import com.tappchart.radar.Constants.FIRST_ELEMENT_POSITION
 import com.tappchart.radar.math.PointCalculator
 import com.tappchart.radar.model.NetStyle
+import com.tappchart.radar.model.RingsStyle
 
 internal fun DrawScope.radarChartNet(
     pointsCount: Int,
@@ -14,25 +15,52 @@ internal fun DrawScope.radarChartNet(
     startAngleOffset: Float = 0f,
     netStyle: NetStyle,
 ) {
-    val spaceBetweenLayers = (circleRadius - netStyle.interiorRadius) / netStyle.layersCount.dec()
-    for (i in 0 until netStyle.layersCount) {
-        drawNetCircle(
-            radius = netStyle.interiorRadius + i * spaceBetweenLayers,
-            pointsCount = pointsCount,
-            startAngleOffset = startAngleOffset,
-            netStyle = netStyle
-        )
-    }
 
-    drawNetLines(
-        pointsCount = pointsCount,
-        spaceBetweenLayers = spaceBetweenLayers,
-        startAngleOffset = startAngleOffset,
-        netStyle = netStyle
-    )
+    drawNet(pointsCount, circleRadius, startAngleOffset, netStyle)
+//
+//    drawNetCrosslines(
+//        pointsCount = pointsCount,
+//        startAngleOffset = startAngleOffset,
+//        netStyle = netStyle,
+//    )
 }
 
-private fun DrawScope.drawNetCircle(
+private fun DrawScope.drawNet(
+    pointsCount: Int,
+    circleRadius: Float,
+    startAngleOffset: Float = 0f,
+    netStyle: NetStyle,
+) {
+    val spaceBetweenLayers = circleRadius / netStyle.ringsCount
+    for (i in 0 until netStyle.ringsCount) {
+        // we start from 1, because if we'd start from 0, it would be just a point in the middle
+        when (netStyle.ringsStyle) {
+            RingsStyle.ROUNDED -> drawRoundedNet(
+                radius = (i + 1) * spaceBetweenLayers,
+                netStyle = netStyle,
+            )
+            RingsStyle.POLYGONS -> drawPolygonalNet(
+                radius = (i + 1) * spaceBetweenLayers,
+                pointsCount = pointsCount,
+                startAngleOffset = startAngleOffset,
+                netStyle = netStyle
+            )
+
+        }
+    }
+}
+
+private fun DrawScope.drawRoundedNet(
+    radius: Float,
+    netStyle: NetStyle
+) = drawCircle(
+    color = netStyle.color,
+    radius = radius,
+    style = netStyle.ringsDrawStyle,
+    center = this.center,
+)
+
+private fun DrawScope.drawPolygonalNet(
     radius: Float,
     pointsCount: Int,
     startAngleOffset: Float,
@@ -72,7 +100,7 @@ private fun DrawScope.drawNetCircle(
     )
 }
 
-private fun DrawScope.drawNetLines(
+private fun DrawScope.drawNetCrosslines(
     pointsCount: Int,
     spaceBetweenLayers: Float,
     startAngleOffset: Float,
@@ -82,7 +110,7 @@ private fun DrawScope.drawNetLines(
 
     for (i in FIRST_ELEMENT_POSITION..pointsCount) {
         val angle = startAngleOffset + degreesPerAngle * i
-        val endRadius = netStyle.interiorRadius + (netStyle.layersCount - 1) * spaceBetweenLayers
+        val endRadius = (netStyle.ringsCount - 1) * spaceBetweenLayers
 
         val startOffset = Offset(
             x = size.width / 2f,

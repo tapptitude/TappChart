@@ -39,6 +39,13 @@ kotlin {
                  */
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 api(compose.components.resources)
+
+                /**
+                 * ** DEV ONLY **
+                 * Material3: Used only while we develop the library, to be able to use it for settings/previews.
+                 * Should not be in the final version of the library
+                 */
+                api(compose.material3)
             }
         }
     }
