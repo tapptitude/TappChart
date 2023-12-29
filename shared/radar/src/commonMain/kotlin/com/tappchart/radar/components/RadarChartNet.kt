@@ -17,12 +17,13 @@ internal fun DrawScope.radarChartNet(
 ) {
 
     drawNet(pointsCount, circleRadius, startAngleOffset, netStyle)
-//
-//    drawNetCrosslines(
-//        pointsCount = pointsCount,
-//        startAngleOffset = startAngleOffset,
-//        netStyle = netStyle,
-//    )
+
+    drawNetCrosslines(
+        circleRadius = circleRadius,
+        pointsCount = pointsCount,
+        startAngleOffset = startAngleOffset,
+        netStyle = netStyle,
+    )
 }
 
 private fun DrawScope.drawNet(
@@ -101,25 +102,32 @@ private fun DrawScope.drawPolygonalNet(
 }
 
 private fun DrawScope.drawNetCrosslines(
+    circleRadius: Float,
     pointsCount: Int,
-    spaceBetweenLayers: Float,
     startAngleOffset: Float,
     netStyle: NetStyle
 ) {
     val degreesPerAngle: Double = CIRCLE_DEGREE / pointsCount
+    val spaceBetweenRings = circleRadius / netStyle.ringsCount
 
     for (i in FIRST_ELEMENT_POSITION..pointsCount) {
         val angle = startAngleOffset + degreesPerAngle * i
-        val endRadius = (netStyle.ringsCount - 1) * spaceBetweenLayers
 
-        val startOffset = Offset(
-            x = size.width / 2f,
-            y = size.height / 2f
-        )
+        val startOffset: Offset = if (netStyle.connectInCenter) {
+            Offset(
+                x = size.width / 2f,
+                y = size.height / 2f
+            )
+        } else {
+            Offset(
+                x = size.width / 2f + PointCalculator.xCoordinateOnCircle(angle, radius = spaceBetweenRings),
+                y = size.height / 2f + PointCalculator.yCoordinateOnCircle(angle, radius = spaceBetweenRings),
+            )
+        }
 
         val endOffset = Offset(
-            x = size.width / 2 + PointCalculator.xCoordinateOnCircle(angle = angle, radius = endRadius),
-            y = size.height / 2 + PointCalculator.yCoordinateOnCircle(angle = angle, radius = endRadius)
+            x = size.width / 2 + PointCalculator.xCoordinateOnCircle(angle = angle, radius = circleRadius),
+            y = size.height / 2 + PointCalculator.yCoordinateOnCircle(angle = angle, radius = circleRadius)
         )
 
         drawLine(

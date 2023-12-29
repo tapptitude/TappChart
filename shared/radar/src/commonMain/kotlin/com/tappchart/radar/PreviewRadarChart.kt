@@ -10,11 +10,15 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,6 +32,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tappchart.radar.model.NetStyle
 import com.tappchart.radar.model.PolygonProperties
@@ -106,7 +111,7 @@ fun Preview_RadarChart() {
                 ringsDrawStyle = Stroke(),
                 linesDrawStyle = Stroke(),
                 ringsStyle = RingsStyle.ROUNDED,
-                connectInMiddle = false,
+                connectInCenter = false,
             )
         )
     }
@@ -120,6 +125,11 @@ fun Preview_RadarChart() {
                 selectedRingStyle = netStyle.ringsStyle,
                 onNetStyleSelected = { rs -> netStyle = netStyle.copy(ringsStyle = rs) }
             )
+            ConnectInCenterColumn(
+                Modifier,
+                connectInCenter = netStyle.connectInCenter,
+                onOptionChange = { netStyle = netStyle.copy(connectInCenter = it) },
+            )
         }
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -128,7 +138,7 @@ fun Preview_RadarChart() {
             RadarChart(
                 modifier = Modifier.fillMaxSize(),
                 pointsCount = 6,
-                angleStartOffset = 0f,//rotation,
+                angleStartOffset = rotation,
                 entries = entries,
                 labels = listOf("label 1", "label 2", "label 3", "label 4", "label 5", "label 6"),
                 labelStyle = TextStyle.Default.copy(fontStyle = FontStyle.Italic),
@@ -140,16 +150,56 @@ fun Preview_RadarChart() {
 }
 
 @Composable
+private fun OptionColumn(
+    modifier: Modifier = Modifier,
+    title: String,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    val scrollable = rememberScrollState()
+    Column(
+        modifier = modifier.then(
+            Modifier.verticalScroll(scrollable)
+        ),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.W600,
+        )
+        content()
+    }
+}
+
+@Composable
+private fun ConnectInCenterColumn(
+    modifier: Modifier,
+    connectInCenter: Boolean,
+    onOptionChange: (Boolean) -> Unit,
+) {
+    OptionColumn(
+        modifier = modifier,
+        title = "Connect in center"
+    ) {
+        Button(enabled = !connectInCenter, onClick = { onOptionChange(true) }) {
+            Text("Yes")
+        }
+        Button(enabled = connectInCenter, onClick = { onOptionChange(false) }) {
+            Text("No")
+        }
+    }
+}
+
+@Composable
 private fun RingStyleColumn(
     modifier: Modifier = Modifier,
     selectedRingStyle: RingsStyle,
     onNetStyleSelected: (RingsStyle) -> Unit,
 ) {
-    Column(
+    OptionColumn(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
+        title = "Ring style"
     ) {
-        Text(text = "Ring style")
         RingsStyle.entries.forEach { rs ->
             Button(
                 enabled = selectedRingStyle != rs,

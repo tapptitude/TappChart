@@ -14,7 +14,7 @@ data class NetStyle(
     val ringsDrawStyle: Stroke,
     val ringsStyle: RingsStyle,
     val linesDrawStyle: Stroke,
-    val connectInMiddle: Boolean = false,
+    val connectInCenter: Boolean = false,
 ) {
     // TODO override hashCode & equal
     //  and remove `data` from the name
