@@ -3,17 +3,18 @@ package com.tappchart.radar.components
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.rotate
 import com.tappchart.radar.Constants.CIRCLE_DEGREE
 import com.tappchart.radar.Constants.FIRST_ELEMENT_POSITION
 import com.tappchart.radar.math.PointCalculator
-import com.tappchart.radar.model.NetStyle
+import com.tappchart.radar.model.CircularNetStyle
 import com.tappchart.radar.model.RingsStyle
 
 internal fun DrawScope.radarChartNet(
     pointsCount: Int,
     circleRadius: Float,
     startAngleOffset: Float = 0f,
-    netStyle: NetStyle,
+    netStyle: CircularNetStyle,
 ) {
 
     drawNet(pointsCount, circleRadius, startAngleOffset, netStyle)
@@ -30,7 +31,7 @@ private fun DrawScope.drawNet(
     pointsCount: Int,
     circleRadius: Float,
     startAngleOffset: Float = 0f,
-    netStyle: NetStyle,
+    netStyle: CircularNetStyle,
 ) {
     val spaceBetweenLayers = circleRadius / netStyle.ringsCount
     for (i in 0 until netStyle.ringsCount) {
@@ -38,6 +39,7 @@ private fun DrawScope.drawNet(
         when (netStyle.ringsStyle) {
             RingsStyle.ROUNDED -> drawRoundedNet(
                 radius = (i + 1) * spaceBetweenLayers,
+                startAngleOffset = startAngleOffset,
                 netStyle = netStyle,
             )
             RingsStyle.POLYGONS -> drawPolygonalNet(
@@ -53,19 +55,26 @@ private fun DrawScope.drawNet(
 
 private fun DrawScope.drawRoundedNet(
     radius: Float,
-    netStyle: NetStyle
-) = drawCircle(
-    color = netStyle.color,
-    radius = radius,
-    style = netStyle.ringsDrawStyle,
-    center = this.center,
-)
+    startAngleOffset: Float,
+    netStyle: CircularNetStyle
+) {
+    // Even if we draw circles, we must rotate the circles as well
+    //  Otherwise, in animations, if we're using a Dashed path, nothing will happen
+    rotate(startAngleOffset) {
+        drawCircle(
+            color = netStyle.color,
+            radius = radius,
+            style = netStyle.ringsDrawStyle,
+            center = this.center,
+        )
+    }
+}
 
 private fun DrawScope.drawPolygonalNet(
     radius: Float,
     pointsCount: Int,
     startAngleOffset: Float,
-    netStyle: NetStyle
+    netStyle: CircularNetStyle
 ) {
     val degreesPerAngle: Double = CIRCLE_DEGREE / pointsCount
     var startOffset = Offset.Unspecified
@@ -98,6 +107,8 @@ private fun DrawScope.drawPolygonalNet(
         strokeWidth = netStyle.width,
         start = previousOffset,
         end = startOffset,
+        cap = netStyle.linesDrawStyle.cap,
+        pathEffect = netStyle.linesDrawStyle.pathEffect,
     )
 }
 
@@ -105,7 +116,7 @@ private fun DrawScope.drawNetCrosslines(
     circleRadius: Float,
     pointsCount: Int,
     startAngleOffset: Float,
-    netStyle: NetStyle
+    netStyle: CircularNetStyle
 ) {
     val degreesPerAngle: Double = CIRCLE_DEGREE / pointsCount
     val spaceBetweenRings = circleRadius / netStyle.ringsCount
@@ -135,6 +146,7 @@ private fun DrawScope.drawNetCrosslines(
             strokeWidth = netStyle.width,
             start = startOffset,
             end = endOffset,
+            pathEffect = netStyle.linesDrawStyle.pathEffect,
         )
     }
 }

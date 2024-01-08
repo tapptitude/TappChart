@@ -28,13 +28,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.tappchart.radar.model.NetStyle
+import com.tappchart.radar.model.CircularNetStyle
 import com.tappchart.radar.model.PolygonProperties
 import com.tappchart.radar.model.RadarEntry
 import com.tappchart.radar.model.RingsStyle
@@ -104,12 +105,16 @@ fun Preview_RadarChart() {
 
     var netStyle by remember {
         mutableStateOf(
-            NetStyle(
+            CircularNetStyle(
                 width = 4f,
-                color = Color.Black,
+                color = Color.Red,
                 ringsCount = 5,
-                ringsDrawStyle = Stroke(),
-                linesDrawStyle = Stroke(),
+                ringsDrawStyle = Stroke(
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), phase = 0f)
+                ),
+                linesDrawStyle = Stroke(
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), phase = 0f)
+                ),
                 ringsStyle = RingsStyle.ROUNDED,
                 connectInCenter = false,
             )
