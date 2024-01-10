@@ -25,6 +25,7 @@ import com.tapptitude.tappchart.model.ValueLabel
 import com.tapptitude.tappchart.ui.AxisStyle
 import com.tapptitude.tappchart.ui.BackgroundStyle
 import com.tapptitude.tappchart.ui.drawBackgroundGradient
+import com.tapptitude.tappchart.util.fastForEachIndexed
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -102,7 +103,7 @@ private fun DrawScope.drawBarsWithHorizontalLabels(
     val barWidth = (canvasWidthWithoutPadding - paddingBetweenBars * bars.lastIndex) / bars.size
 
     var barStartPosition = yAxisPaddingToFirstBar + firstBarStartPadding
-    bars.forEachIndexed { index, bar ->
+    bars.fastForEachIndexed { index, bar ->
         val color = barColor.getOrNull(index) ?: barColor.firstOrNull() ?: Color.Blue
         val barHeightScaledToCanvas = bar.value * bottomOfChart / yAxisInterval.max
         val barVerticalPosition = bottomOfChart - barHeightScaledToCanvas
@@ -185,7 +186,7 @@ private fun DrawScope.drawVerticalLabelsAndBackground(
             endOffset = Offset(size.width, bottomOfChart)
         )
     }
-    verticalLabels.forEachIndexed { index, label ->
+    verticalLabels.fastForEachIndexed { index, label ->
         val labelSize = textMeasurer.measure(label.label, labelStyle)
         val halfOfLabelHeight = labelSize.size.height / 2
         val labelPositionScaledToCanvas = (bottomOfChart * label.yValue) / yAxisInterval.max
