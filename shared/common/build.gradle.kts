@@ -39,6 +39,8 @@ kotlin {
                  */
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 api(compose.components.resources)
+
+                api("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.6")
             }
         }
     }
